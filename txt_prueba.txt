@@ -1,0 +1,5 @@
+El machine learning ha revolucionado la industria de los videojuegos al ofrecer capacidades de inteligencia artificial que mejoran la experiencia del jugador y la jugabilidad.
+Una de las aplicaciones más destacadas es la creación de personajes no jugadores (NPCs) más realistas y adaptativos. Con algoritmos de aprendizaje automático,
+los NPCs pueden aprender del comportamiento de los jugadores, ajustar sus estrategias y niveles de dificultad en tiempo real, brindando desafíos más dinámicos y experiencias de juego
+más inmersivas. Además, el machine learning se utiliza para personalizar la experiencia del jugador, desde recomendaciones de contenido hasta ajustes de dificultad basados en el
+rendimiento individual, lo que garantiza que cada sesión de juego sea única y satisfactoria para el usuario.
