@@ -16,7 +16,7 @@ class TextProcessor:
     def clean_file(self, document):
     # This function is use to clean the .txt removing points and other things 
         with open(document, encoding="utf-8") as file:
-            document = file.read()
+            document = file.read().lower()
             #Optimization done by removing the other .replace() functions and just using the for loop
             for char in ",.¿?¡!()@#$":
                 document = document.replace(char, '')
@@ -41,12 +41,12 @@ class TextProcessor:
                 words.append((Lancaster_stemmer.stem(palabra[0])))
         return words
 
-    def create_corpus(self, words):
+    def create_corpus(self, stems):
         """
         This function creates a corpus with the words of the .txt
         corpus means that it will only have unique words
         """
-        corpus = list(dict.fromkeys(words))
+        corpus = list(dict.fromkeys(stems))
         return corpus
 
     def create_matrix(self, stems1, stems2):
@@ -72,16 +72,11 @@ class TextProcessor:
         and the big_corpus previously created,
         this matrix is made with 1s and 0s
         """
+        # Optimized by removing the for loop and using list comprehension
+        # changed it due to the test results
         unigram_matrix = []
-        for parrafo in final_matrix:
-            mx = []
-            for palabra_c in big_corpus:
-                if palabra_c in parrafo:
-                    mx.append(1)
-                else:
-                    mx.append(0)
-            unigram_matrix.append(mx)
-        
+        for paragraph in final_matrix:
+            unigram_matrix.append([1 if word in paragraph else 0 for word in big_corpus])
         return unigram_matrix
 
     def cosine_evaluation(self, unigram_matrix):
@@ -99,7 +94,7 @@ class TextProcessor:
         55% the two .txt are considered similar and therefor plagiarism.
         A message indicating plagiarism is printed
         """
-        print("\nThe similarity of the two documents is: {:.2f}%".format(cosine_evaluation[0][1]*100), "\n", "The two documents provided are similar and therefor plagiarism is present.\n" if cosine_evaluation[0][1] > 0.55 else "The two documents are not similar, there's no plagiarism present.\n")
+        print("\nThe similarity of the two documents is: {:.2f}%".format(cosine_evaluation[0][1]*100), "\n", "The two documents provided are similar and therefor plagiarism is present.\n" if cosine_evaluation[0][1] >= 0.55 else "The two documents are not similar, there's no plagiarism present.\n")
         
 
     def process(self):
