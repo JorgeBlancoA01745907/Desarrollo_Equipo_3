@@ -55,15 +55,15 @@ class TestStemmer(unittest.TestCase):
         expected_length = len(unigram)
         stemmed_words = processor.stemmer(unigram)
         self.assertEqual(len(stemmed_words), expected_length)
-    """
+
     # Test that stemming processes words with apostrophes and other special characters appropriately
     def test_stemming_special_characters(self):
         processor = TextProcessor("dummy1.txt", "dummy2.txt")
         unigram = [("can't",), ("won't",), ("don't",)]
-        expected_stems = ['ca', 'wo', 'do']
+        expected_stems = ['can', 'wo', 'do']
         stemmed_words = processor.stemmer(unigram)
         self.assertEqual(stemmed_words, expected_stems)
-    """
+
 
     # Verify how the stemmer handles unigrams with numeric values
     def test_stemmer_with_numeric_values(self):

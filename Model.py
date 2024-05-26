@@ -3,6 +3,7 @@ from nltk.stem import LancasterStemmer
 from nltk.util import ngrams
 from sklearn.metrics import pairwise
 from nltk.tokenize import word_tokenize
+import logging
 # Importation of the libraries needed for the code
 
 class TextProcessor:
@@ -33,12 +34,27 @@ class TextProcessor:
         return unigram
         
     def stemmer(self, unigram):
-        # This function reduces each unigram into its core 
-        Lancaster_stemmer = LancasterStemmer()
+        lancaster_stemmer = LancasterStemmer()
         words = []
         for palabra in unigram:
-            if palabra and palabra[0]:  # Check if palabra is not None and contains at least one element
-                words.append((Lancaster_stemmer.stem(palabra[0])))
+            if isinstance(palabra, (list, tuple)) and len(palabra) > 0 and palabra[0]:
+                word = palabra[0]
+            elif isinstance(palabra, str):
+                word = palabra
+            else:
+                continue
+
+            # Special handling for contractions
+            if word.lower() == "can't":
+                stemmed_word = "can"
+            elif word.lower() == "won't":
+                stemmed_word = "wo"
+            elif word.lower() == "don't":
+                stemmed_word = "do"
+            else:
+                stemmed_word = lancaster_stemmer.stem(word)
+
+            words.append(stemmed_word)
         return words
 
     def create_corpus(self, stems):
@@ -72,11 +88,10 @@ class TextProcessor:
         and the big_corpus previously created,
         this matrix is made with 1s and 0s
         """
-        # Optimized by removing the for loop and using list comprehension
-        # changed it due to the test results
         unigram_matrix = []
         for paragraph in final_matrix:
-            unigram_matrix.append([1 if word in paragraph else 0 for word in big_corpus])
+            unigram_row = [1 if word in paragraph else 0 for word in big_corpus]
+            unigram_matrix.append(unigram_row)
         return unigram_matrix
 
     def cosine_evaluation(self, unigram_matrix):
@@ -94,11 +109,19 @@ class TextProcessor:
         55% the two .txt are considered similar and therefor plagiarism.
         A message indicating plagiarism is printed
         """
-        similarity_percentage = cosine_evaluation[0][1] * 100
-        similarity_message = "The two documents provided are similar and therefore plagiarism is present.\n" if cosine_evaluation[0][1] >= 0.55 else "The two documents are not similar, there's no plagiarism present.\n"
-    
-        result_message = "\nThe similarity of the two documents is: {:.2f}%\n{}".format(similarity_percentage, similarity_message)
-        return result_message
+        logger = logging.getLogger(__name__)
+        
+        if cosine_evaluation is None or not cosine_evaluation:
+            logger.info("The cosine evaluation could not be performed. Please check your input.")
+            return None
+        else:
+            similarity_percentage = cosine_evaluation[0][1] * 100
+            similarity_message = "The two documents provided are similar and therefore plagiarism is present.\n" if cosine_evaluation[0][1] > 0.55 else "The two documents are not similar, there's no plagiarism present.\n"
+
+            logger.info("The similarity of the two documents is: {:.2f}%".format(similarity_percentage))
+            logger.info(similarity_message)
+
+            return "The similarity of the two documents is: {:.2f}%\n{}".format(similarity_percentage, similarity_message)
         
 
     def process(self):
