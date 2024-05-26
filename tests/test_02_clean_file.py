@@ -23,7 +23,7 @@ class TestCleanFile(unittest.TestCase):
         with patch('builtins.open', mock_open(read_data="Hello, world! How are you? (I hope well).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            expected = "Hello world How are you I hope well"
+            expected = "hello world how are you i hope well"
             assert result == expected, f"Expected '{expected}', but got '{result}'"
 
     # Test with an empty file to see if it returns an empty string
@@ -39,15 +39,15 @@ class TestCleanFile(unittest.TestCase):
         with patch('builtins.open', mock_open(read_data="Hello, world! How are you? (I hope well).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            expected = "Hello world How are you I hope well"
-            assert result == expected, f"Expected '{expected}', but got '{result}'"
+            expected = "hello world how are you i hope well"
+            assert result == expected, f"Expected '{expected.lower()}', but got '{result}'"
             
     # Check that the method reads the entire content of a file correctly
     def test_read_entire_content(self):
         with patch('builtins.open', mock_open(read_data="This is a test file with multiple lines. Line 2. Line 3.")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            expected = "This is a test file with multiple lines Line 2 Line 3"
+            expected = "this is a test file with multiple lines line 2 line 3"
             assert result == expected, f"Expected '{expected}', but got '{result}'"
 
     # Verify behavior when the file contains only punctuation marks
@@ -70,7 +70,7 @@ class TestCleanFile(unittest.TestCase):
         with patch('builtins.open', mock_open(read_data="Hóla, qué tal? ¿Cómo estás? (Espero que bien).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            self.assertEqual(result, "Hóla qué tal Cómo estás Espero que bien")
+            self.assertEqual(result, "hóla qué tal cómo estás espero que bien")
     
     # Evaluate the function's response to a file path that does not exist
     def test_file_not_found(self):
@@ -84,16 +84,16 @@ class TestCleanFile(unittest.TestCase):
         with patch('builtins.open', mock_open(read_data="Hello, world! How are you? (I hope well).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            expected = "Hello world How are you I hope well"
-            assert result == expected, f"Expected '{expected}', but got '{result}'"
+            expected = "hello world how are you i hope well"
+            assert result == expected, f"Expected '{expected.lower()}', but got '{result}'"
 
     # Determine the method's behavior with read-only files
     def test_clean_file_read_only_files(self):
         with patch('builtins.open', mock_open(read_data="Hello, world! How are you? (I hope well).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            expected = "Hello world How are you I hope well"
-            assert result == expected, f"Expected '{expected}', but got '{result}'"
+            expected = "hello world how are you i hope well"
+            assert result == expected, f"Expected '{expected.lower()}', but got '{result}'"
 
     # Test the method's response to concurrent access to the same file
     def test_concurrent_access(self):
@@ -101,7 +101,7 @@ class TestCleanFile(unittest.TestCase):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result1 = processor.clean_file("dummy_path1.txt")
             result2 = processor.clean_file("dummy_path1.txt")
-            self.assertEqual(result1, result2, "Concurrent access did not produce the same result")
+            self.assertEqual(result1, result2, "concurrent access did not produce the same result")
    
    # Verify the method's handling of files with mixed content (text, numbers, symbols)
     def test_handling_mixed_content(self):
@@ -109,7 +109,7 @@ class TestCleanFile(unittest.TestCase):
         with patch('builtins.open',mock_open(read_data="Hello 123 world! @#$ How are you? (I hope well).")):
             processor = TextProcessor("dummy_path1.txt", "dummy_path2.txt")
             result = processor.clean_file("dummy_path1.txt")
-            self.assertEqual(result, "Hello 123 world How are you I hope well")
+            self.assertEqual(result, "hello 123 world how are you i hope well")
 
     # Assess performance with very large text files
     def test_performance_large_text_files(self):
