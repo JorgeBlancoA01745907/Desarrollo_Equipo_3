@@ -1,4 +1,4 @@
-# File: tests/test_01_NLP.py
+# File: tests/test_01_unigram.py
 """
 Authors: Erika García,
 Christian Parrish,
@@ -77,16 +77,7 @@ class TestUnigram(unittest.TestCase):
         result = processor.make_unigram("This is a test\nwith newline characters")
         expected = [('This',), ('is',), ('a',), ('test',), ('with',), ('newline',), ('characters',)]
         assert result == expected, f"Expected {expected}, but got {result}"
-    """
-    # Test with a very long string to check performance and memory usage
-    def test_long_string_performance(self):
-        processor = TextProcessor("dummy1.txt", "dummy2.txt")
-        long_string = " ".join(["word" + str(i) for i in range(100000)])  # Creating a very long string
-        result = processor.make_unigram(long_string)
-        expected = [('word0',), ('word1',), ('word2',), ..., ('word99999',)]  # Expected unigrams
-        assert result == expected, f"Expected {expected}, but got {result}"
-    """
-    
+
     # Test with a string that includes tab characters
     def test_string_with_tab_characters(self):
         processor = TextProcessor("dummy1.txt", "dummy2.txt")
