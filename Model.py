@@ -94,7 +94,11 @@ class TextProcessor:
         55% the two .txt are considered similar and therefor plagiarism.
         A message indicating plagiarism is printed
         """
-        print("\nThe similarity of the two documents is: {:.2f}%".format(cosine_evaluation[0][1]*100), "\n", "The two documents provided are similar and therefor plagiarism is present.\n" if cosine_evaluation[0][1] >= 0.55 else "The two documents are not similar, there's no plagiarism present.\n")
+        similarity_percentage = cosine_evaluation[0][1] * 100
+        similarity_message = "The two documents provided are similar and therefore plagiarism is present.\n" if cosine_evaluation[0][1] >= 0.55 else "The two documents are not similar, there's no plagiarism present.\n"
+    
+        result_message = "\nThe similarity of the two documents is: {:.2f}%\n{}".format(similarity_percentage, similarity_message)
+        return result_message
         
 
     def process(self):
@@ -126,7 +130,7 @@ class TextProcessor:
 
         # Cosine evaluation
         similarity_score = self.cosine_evaluation(unigram_matrix)
-        self.results(similarity_score)
+        print(self.results(similarity_score))
         return similarity_score
 
 def main():
