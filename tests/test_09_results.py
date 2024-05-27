@@ -87,7 +87,12 @@ class TestResults(unittest.TestCase):
     def test_cosine_evaluation_empty_or_malformed(self):
         processor = TextProcessor("org-023.txt", "FID-005.txt")
         with self.assertLogs() as captured:
-            processor.results([])  # Pasar None en lugar de una matriz vacía
+            processor.results([])  # Pasar una lista vacía para probar el caso de entrada vacía
+        self.assertNotIn("The similarity of the two documents is: 0.00%", captured.output)
+        self.assertIn("The cosine evaluation could not be performed. Please check your input.", captured.output[0])
+
+        with self.assertLogs() as captured:
+            processor.results(None)  # Pasar None para probar el caso de entrada None
         self.assertNotIn("The similarity of the two documents is: 0.00%", captured.output)
         self.assertIn("The cosine evaluation could not be performed. Please check your input.", captured.output[0])
     # Check for correct rounding of percentages to two decimal places

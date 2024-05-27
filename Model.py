@@ -4,6 +4,7 @@ from nltk.util import ngrams
 from sklearn.metrics import pairwise
 from nltk.tokenize import word_tokenize
 import logging
+import numpy as np
 # Importation of the libraries needed for the code
 
 class TextProcessor:
@@ -110,18 +111,28 @@ class TextProcessor:
         A message indicating plagiarism is printed
         """
         logger = logging.getLogger(__name__)
-        
-        if cosine_evaluation is None or not cosine_evaluation:
+
+        # Check if cosine_evaluation is None or empty
+        if cosine_evaluation is None or (isinstance(cosine_evaluation, (list, np.ndarray)) and len(cosine_evaluation) == 0):
             logger.info("The cosine evaluation could not be performed. Please check your input.")
             return None
-        else:
+
+        try:
             similarity_percentage = cosine_evaluation[0][1] * 100
-            similarity_message = "The two documents provided are similar and therefore plagiarism is present.\n" if cosine_evaluation[0][1] > 0.55 else "The two documents are not similar, there's no plagiarism present.\n"
+        except IndexError as e:
+            logger.error(f"Error computing similarity percentage: {e}")
+            return None
 
-            logger.info("The similarity of the two documents is: {:.2f}%".format(similarity_percentage))
-            logger.info(similarity_message)
+        similarity_message = (
+            "The two documents provided are similar and therefore plagiarism is present.\n"
+            if cosine_evaluation[0][1] > 0.55 else
+            "The two documents are not similar, there's no plagiarism present.\n"
+        )
 
-            return "The similarity of the two documents is: {:.2f}%\n{}".format(similarity_percentage, similarity_message)
+        logger.info(f"The similarity of the two documents is: {similarity_percentage:.2f}%")
+        logger.info(similarity_message)
+
+        return f"The similarity of the two documents is: {similarity_percentage:.2f}%\n{similarity_message}"
         
 
     def process(self):
@@ -131,8 +142,8 @@ class TextProcessor:
         """
 
         # Clean documents
-        document1 = self.clean_file("org-023.txt")
-        document2 = self.clean_file("FID-005.txt")
+        document1 = self.clean_file(self.file1)
+        document2 = self.clean_file(self.file2)
 
         # Create unigram
         unigram1 = self.make_unigram(document1)
@@ -156,9 +167,3 @@ class TextProcessor:
         print(self.results(similarity_score))
         return similarity_score
 
-def main():
-    processor = TextProcessor("org-023.txt", "FID-005.txt")
-    processor.process()
-
-if __name__ == "__main__":
-    main()
