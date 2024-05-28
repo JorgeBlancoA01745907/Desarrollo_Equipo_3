@@ -5,6 +5,7 @@ from sklearn.metrics import pairwise
 from nltk.tokenize import word_tokenize
 import logging
 import numpy as np
+from tabulate import tabulate
 # Importation of the libraries needed for the code
 
 class TextProcessor:
@@ -129,10 +130,16 @@ class TextProcessor:
             "The two documents are not similar, there's no plagiarism present.\n"
         )
 
+        result = {
+            "File being compared": self.file1,
+            "Comparing with": self.file2,
+            "Percentage of similarity": f"{similarity_percentage:.2f}%"
+        }
+
         logger.info(f"The similarity of the two documents is: {similarity_percentage:.2f}%")
         logger.info(similarity_message)
 
-        return f"The similarity of the two documents is: {similarity_percentage:.2f}%\n{similarity_message}"
+        return result
         
 
     def process(self):
@@ -166,4 +173,11 @@ class TextProcessor:
         similarity_score = self.cosine_evaluation(unigram_matrix)
         print(self.results(similarity_score))
         return similarity_score
+    
+        # Print result in tabular format
+        if result:
+            print(tabulate([result], headers="keys", tablefmt="grid"))
+        
+        return similarity_score
+
 

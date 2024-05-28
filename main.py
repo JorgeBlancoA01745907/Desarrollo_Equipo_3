@@ -22,7 +22,7 @@ def main():
         else:
             for file2 in files_to_compare:
                 file2_path = os.path.join("documents/", file2)
-                print(f"Comparando {file1} con {file2_path}")
+                #print(f"Comparando {file1} con {file2_path}")
                 processor = TextProcessor(file1, file2_path)
                 processor.process()
         
