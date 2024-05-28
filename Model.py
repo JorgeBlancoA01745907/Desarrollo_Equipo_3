@@ -125,7 +125,7 @@ class TextProcessor:
 
         similarity_message = (
             "The two documents provided are similar and therefore plagiarism is present.\n"
-            if cosine_evaluation[0][1] > 0.55 else
+            if cosine_evaluation[0][1] >= 0.55 else
             "The two documents are not similar, there's no plagiarism present.\n"
         )
 

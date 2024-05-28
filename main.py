@@ -13,18 +13,20 @@ def main():
                 break
             else:
                 print(f"El archivo {file1} no se encuentra. Por favor, ingrese otro nombre de archivo.")
+
+        # Lista de archivos en la carpeta 'documents' (excepto el file1)
+        files_to_compare = [f for f in os.listdir("documents/") if os.path.isfile(os.path.join("documents/", f)) and f != os.path.basename(file1)]
         
-        # Verifica la existencia del segundo archivo
-        while True:
-            file2 = "documents/" + input("Por favor ingrese el nombre del segundo archivo (nombre.txt): ")
-            if os.path.isfile(file2):
-                break
-            else:
-                print(f"El archivo {file2} no se encuentra. Por favor, ingrese otro nombre de archivo.")
+        if not files_to_compare:
+            print("No hay otros archivos en la carpeta 'documents' para comparar.")
+        else:
+            for file2 in files_to_compare:
+                file2_path = os.path.join("documents/", file2)
+                print(f"Comparando {file1} con {file2_path}")
+                processor = TextProcessor(file1, file2_path)
+                processor.process()
         
-        processor = TextProcessor(file1, file2)
-        processor.process()
-        compare = input("Desea comparar otro par de archivos? (s/n): ").lower() == "s"
+        compare = input("Desea comparar otro archivo? (s/n): ").lower() == "s"
     
 if __name__ == "__main__":
     main()
