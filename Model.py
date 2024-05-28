@@ -3,6 +3,7 @@ from nltk.stem import LancasterStemmer
 from nltk.util import ngrams
 from sklearn.metrics import pairwise
 from nltk.tokenize import word_tokenize
+import spacy
 import logging
 import numpy as np
 from tabulate import tabulate
@@ -31,6 +32,30 @@ class TextProcessor:
         # This function devides the .txt in unigrams (separetes it by words)
         unigram = list(ngrams(document.split(),1))
         return unigram
+    
+    def lemmatizer(self, unigram):
+        nlp = spacy.load('en_core_web_sm')
+        words = []
+        for palabra in unigram:
+            if isinstance(palabra, (list, tuple)) and len(palabra) > 0 and palabra[0]:
+                word = palabra[0]
+            elif isinstance(palabra, str):
+                word = palabra
+            else:
+                continue
+
+            doc = nlp(word)
+            lemmatized_word = doc[0].lemma_
+
+            if word.lower() == "can't":
+                lemmatized_word = "can"
+            elif word.lower() == "won't":
+                lemmatized_word = "will"
+            elif word.lower() == "don't":
+                lemmatized_word = "do"
+
+            words.append(lemmatized_word)
+        return words
         
     def stemmer(self, unigram):
         lancaster_stemmer = LancasterStemmer()
@@ -145,8 +170,8 @@ class TextProcessor:
         unigram2 = self.make_unigram(document2)
         
         # Stemming
-        stems1 = self.stemmer(unigram1)
-        stems2 = self.stemmer(unigram2)
+        stems1 = self.lemmatizer(unigram1)
+        stems2 = self.lemmatizer(unigram2)
         
         # Create corpus
         corpus1 = self.create_corpus(stems1)
