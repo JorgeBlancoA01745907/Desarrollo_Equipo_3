@@ -145,11 +145,17 @@ class TextProcessor:
         except IndexError as e:
             logger.error(f"Error computing similarity percentage: {e}")
             return None
+        
+        if similarity_percentage > 50.1:
+            plagiarism = "Plagiarism detected"
+        else:
+            plagiarism = "No plagiarism detected"
 
         result = {
             "File being compared": self.file1,
             "Comparing with": self.file2,
-            "Percentage of similarity": similarity_percentage
+            "Percentage of similarity": similarity_percentage,
+            "Plagiarism": plagiarism
         }
 
         return result
