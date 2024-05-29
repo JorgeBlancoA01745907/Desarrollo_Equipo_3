@@ -57,10 +57,12 @@ def compare_file_with_folder():
                 results.append(result)
         if results:
             # Sort results by the "Comparing with" field in ascending order
-            results = sorted(results, key=lambda x: x["Comparing with"])
+            results = sorted(results, key=lambda x: x["Percentage of similarity"], reverse=True)
             
             print("\nResults:")
-            print(tabulate(results, headers="keys", tablefmt="pretty"))
+            #print the first two results
+
+            print(tabulate(results[0:2], headers="keys", tablefmt="pretty"))
 
 def compare_all_files_in_folder():
     """
