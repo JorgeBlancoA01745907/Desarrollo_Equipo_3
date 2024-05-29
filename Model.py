@@ -141,7 +141,7 @@ class TextProcessor:
             return None
 
         try:
-            similarity_percentage = cosine_evaluation[0][1] * 100
+            similarity_percentage = round((cosine_evaluation[0][1] * 100),2)
         except IndexError as e:
             logger.error(f"Error computing similarity percentage: {e}")
             return None
@@ -149,7 +149,7 @@ class TextProcessor:
         result = {
             "File being compared": self.file1,
             "Comparing with": self.file2,
-            "Percentage of similarity": f"{similarity_percentage:.2f}%"
+            "Percentage of similarity": similarity_percentage
         }
 
         return result
