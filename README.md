@@ -3,6 +3,17 @@
 Este repositorio contiene el archivo Model.py el cual contiene código de NLP para la comparación de dos archivos y poder decir si contiene plagio y en que porcentaje. Cuenta con algunos archivos .txt que se usan para la comparación. Dentro de la carpeta **tests** se encuentran todos los archivos de nuestras pruebas unitarias. 
 
 ## Instrucciones
+**Instalar las siguientes librerías**
+```bash
+pip3 install  nltk
+pip3 install sklearn
+pip3 install pairwise
+pip3 install spacy
+python -m space download en_core_web_sm
+pip3 install scikit-learn
+pip3 install tabulate
+```
+
 **Para correr el proyecto**
 ```bash
 python3 main.py

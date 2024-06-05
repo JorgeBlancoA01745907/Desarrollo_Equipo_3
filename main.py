@@ -7,6 +7,8 @@ from Model import TextProcessor
 from tabulate import tabulate
 import logging
 import os
+from itertools import combinations
+from operator import itemgetter
 
 def compare_two_files():
     """
@@ -57,35 +59,35 @@ def compare_file_with_folder():
                 results.append(result)
         if results:
             # Sort results by the "Comparing with" field in ascending order
-            results = sorted(results, key=lambda x: x["Comparing with"])
+            results = sorted(results, key=lambda x: x["Percentage of similarity"], reverse=True)
             
             print("\nResults:")
-            print(tabulate(results, headers="keys", tablefmt="pretty"))
+            #print the first two results
+
+            print(tabulate(results[0:2], headers="keys", tablefmt="pretty"))
 
 def compare_all_files_in_folder():
     """
     This function compares all the files in the folder 'documents' between them
     """
-    files = [f for f in os.listdir("documents/") if os.path.isfile(os.path.join("documents/", f))]
-    
+    files = (entry.name for entry in os.scandir("documents/") if entry.is_file())
+    files = list(files)  # Convert generator to list to get length
+
     if len(files) < 2:
         print("There are not enough files in the folder 'documents' to compare.")
     else:
-        results = []
-        for i in range(len(files)):
-            for j in range(i + 1, len(files)):
-                file1 = os.path.join("documents/", files[i])
-                file2 = os.path.join("documents/", files[j])
-                processor = TextProcessor(file1, file2)
-                result = processor.process()
-                if result:
-                    results.append(result)
+        results = [
+            TextProcessor(os.path.join("documents/", file1), os.path.join("documents/", file2)).process()
+            for file1, file2 in combinations(files, 2)
+        ]
+        results = [result for result in results if result]  # Filter out None results
+
         if results:
             # Sort results by the "Comparing with" field in ascending order
-            results = sorted(results, key=lambda x: x["Comparing with"])
-            
+            results.sort(key=itemgetter("Comparing with"))
+
             print("\nResults:")
-            print(tabulate(results, headers="keys", tablefmt="pretty"))
+            print(tabulate(results[0:2], headers="keys", tablefmt="pretty"))
 
 def main():
     print("\nWelcome to the program that detects plagiarism")
