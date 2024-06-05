@@ -43,9 +43,11 @@ def main():
         file2_path = os.path.join("documents", file2)
         processor = TextProcessor(file1_path, file2_path)
         similarity_score = processor.process()
-        if (similarity_score[0][1] >= 0.55):
+        if (similarity_score['Percentage of similarity'] >= 50.1):
+            print(similarity_score['Percentage of similarity'])
             X.append(1)
         else:
+            print("0")
             X.append(0)
         y.append(label)
 

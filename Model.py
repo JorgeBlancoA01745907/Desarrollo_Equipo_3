@@ -26,9 +26,6 @@ class TextProcessor:
                 document = document.replace(char, '')
             # Remove extra spaces, this was added after running the tests
             document = ' '.join(document.split())
-        #print("\n")
-        #print(document)
-        #print("\n")
         return document
 
     def make_unigram(self, document):
@@ -144,25 +141,22 @@ class TextProcessor:
             return None
 
         try:
-            similarity_percentage = cosine_evaluation[0][1] * 100
+            similarity_percentage = round((cosine_evaluation[0][1] * 100),2)
         except IndexError as e:
             logger.error(f"Error computing similarity percentage: {e}")
             return None
-
-        similarity_message = (
-            "The two documents provided are similar and therefore plagiarism is present.\n"
-            if cosine_evaluation[0][1] >= 0.55 else
-            "The two documents are not similar, there's no plagiarism present.\n"
-        )
+        
+        if similarity_percentage > 50.1:
+            plagiarism = "Plagiarism detected"
+        else:
+            plagiarism = "No plagiarism detected"
 
         result = {
             "File being compared": self.file1,
             "Comparing with": self.file2,
-            "Percentage of similarity": f"{similarity_percentage:.2f}%"
+            "Percentage of similarity": similarity_percentage,
+            "Plagiarism": plagiarism
         }
-
-        logger.info(f"The similarity of the two documents is: {similarity_percentage:.2f}%")
-        logger.info(similarity_message)
 
         return result
         
@@ -196,13 +190,9 @@ class TextProcessor:
 
         # Cosine evaluation
         similarity_score = self.cosine_evaluation(unigram_matrix)
-        print(self.results(similarity_score))
-        return similarity_score
     
-        # Print result in tabular format
-        if result:
-            print(tabulate([result], headers="keys", tablefmt="grid"))
-        
-        return similarity_score
+        # The results are returned
+        result = self.results(similarity_score)
+        return result
 
 
