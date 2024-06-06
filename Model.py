@@ -152,8 +152,8 @@ class TextProcessor:
             plagiarism = "No plagiarism detected"
 
         result = {
-            "File being compared": self.file1,
-            "Comparing with": self.file2,
+            "File": self.file1,
+            "Plagiarized from": self.file2,
             "Percentage of similarity": similarity_percentage,
             "Plagiarism": plagiarism
         }
