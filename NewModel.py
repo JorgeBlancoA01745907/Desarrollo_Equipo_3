@@ -101,7 +101,7 @@ class similarityCalculation:
                 self.auc_list.append(0)
 
         # Datos de ejemplo con etiquetas reales
-        labels = [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        labels = [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
         
 
 
