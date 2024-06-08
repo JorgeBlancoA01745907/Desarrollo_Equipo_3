@@ -1,8 +1,8 @@
 # Desarrollo_Equipo_3
 
-Este repositorio contiene el archivo Model.py el cual contiene código de NLP para la comparación de dos archivos y poder decir si contiene plagio y en que porcentaje. Cuenta con algunos archivos .txt que se usan para la comparación. Dentro de la carpeta **tests** se encuentran todos los archivos de nuestras pruebas unitarias. 
+Este repositorio contiene el archivo Model.py el cual contiene código de NLP para la comparación de dos archivos y poder decir si contiene plagio y en que porcentaje. También está el archivo NewModel.py con nuestro nuevo modelo que contiene Inteligencia Artificial. Cuenta con 2 archivos main para correr nuestras implementaciones, main.py corre nuestra implementación de NLP y mainIA.py tiene nuestro modelo con Inteligencia Artificial. Cuenta con la carpeta **originals** que contiene los archivos .txt originales, también la carpeta **suspicious** que tiene los .txt de los cuales se sospecha presencia de plagio. Dentro de la carpeta **tests** se encuentran todos los archivos de nuestras pruebas unitarias. 
 
-## Instrucciones
+## Instrucciones NLP
 **Instalar las siguientes librerías**
 ```bash
 pip3 install  nltk
@@ -33,3 +33,24 @@ Si se elige la opción 1 proporcionar el nombre de los archivos a comparar y si 
 ```bash
 python3 -m unittest   
 ```
+
+
+
+## Instrucciones IA
+**Instalar las siguientes librerías**
+```bash
+pip3 install matplotlib
+pip3 install nltk
+pip3 install transformers
+pip3 install torch
+pip3 install tabulate
+pip3 install scikit-learn
+
+```
+
+**Para correr el proyecto**
+```bash
+python3 mainIA.py
+```
+
+
